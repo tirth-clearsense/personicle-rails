@@ -1,11 +1,11 @@
 <style>
-.hidden {
+  .hidden {
     display: none;
-}
-.tab {
-  float: left;
-}
+  }
 
+  .tab {
+    float: left;
+  }
 </style>
 
 
@@ -19,95 +19,100 @@
       </div>
       <div class="col">
 
-        <ul  class="nav nav-pills justify-content-end">
-          <li class="nav-item mr-2 mr-md-0" value="daily" data-toggle="chart" data-target="#chart-sales-dark" data-update='{"data":{"datasets":[{"data":[0, 20, 10, 30, 15, 40, 20, 60, 60]}]}}' data-prefix="$" data-suffix="k">
-          
-          <div id="actions" class="btn-group btn-group-toggle" data-toggle="buttons">
+        <ul class="nav nav-pills justify-content-end">
+          <li class="nav-item mr-2 mr-md-0" value="daily" data-toggle="chart" data-target="#chart-sales-dark"
+            data-update='{"data":{"datasets":[{"data":[0, 20, 10, 30, 15, 40, 20, 60, 60]}]}}' data-prefix="$"
+            data-suffix="k">
+
+            <div id="actions" class="btn-group btn-group-toggle" data-toggle="buttons">
               <label class="btn btn-secondary">
-                <input type="radio" name="chart" value="daily" checked><span class="hovertext" data-hover="A column chart showing daily steps by date."><i class="fa fa-info-circle" aria-hidden="true"></i></span> Daily
+                <input type="radio" name="chart" value="daily" checked><span class="hovertext"
+                  data-hover="A column chart showing daily steps by date."><i class="fa fa-info-circle"
+                    aria-hidden="true"></i></span> Daily
               </label>
               <label class="btn btn-secondary">
-                <input type="radio" name="chart" value="weekly" ><span class="hovertext" data-hover="A column chart showing weekly steps by the 1st day of each week."><i class="fa fa-info-circle" aria-hidden="true"></i></span> Weekly
+                <input type="radio" name="chart" value="weekly"><span class="hovertext"
+                  data-hover="A column chart showing weekly steps by the 1st day of each week."><i
+                    class="fa fa-info-circle" aria-hidden="true"></i></span> Weekly
               </label>
-          </div>
-           
+            </div>
+
           </li>
-          <li class="nav-item"  data-toggle="chart" data-target="#chart-sales-dark" data-update='{"data":{"datasets":[{"data":[0, 20, 5, 25, 10, 30, 15, 40, 40]}]}}' data-prefix="$" data-suffix="k">
+          <li class="nav-item" data-toggle="chart" data-target="#chart-sales-dark"
+            data-update='{"data":{"datasets":[{"data":[0, 20, 5, 25, 10, 30, 15, 40, 40]}]}}' data-prefix="$"
+            data-suffix="k">
           </li>
         </ul>
       </div>
     </div>
   </div>
-  
+
   <div class="card-body">
-  
+
     <!-- Chart -->
     <div class="chart">
-        
-      <% if daily_user_data.length() != 0 or weekly_user_data.length()!=0 %>
-         
+
+      <% if (daily_user_data.length() != 0 or weekly_user_data.length()!=0) %>
+      <% puts "Daily User Data " %>
+      <% puts daily_user_data %>
+      <% puts "Weekly User Data " %>
+      <% puts weekly_user_data  %>
+      <% puts "Last Week's User Data " %>
+      <% puts last_week_data %>
+
       <div id="charts">
-          
-        <div id="activity_chart_daily" class="chart">
-
-            <%= column_chart [
-                  {
-                      name: "Daily Steps", type: "column", data: daily_user_data
-                  }
-              ], suffix: " steps",points:false, round: 2, loading: "Loading...", xtitle: "Date", ytitle: "Total Steps" %>
-
-        </div>
-
-
         <div id="activity_chart_weekly" class="chart hidden">
-
-            <%= column_chart [
+          <%= column_chart [
                   {
                       name: "Weekly Steps", type: "column", data: weekly_user_data
                   }
               ], suffix: " steps",points:false, round: 2, loading: "Loading...", xtitle: "Starting Date for the Week", ytitle: "Total Steps" %>
-
         </div>
 
+        <div id="activity_chart_daily" class="chart">
+          <% if last_week_data == 0 %>
+          <h3 style="color:black;">No activity for the past 1 week</h3>
+          <% else %>
+          <%= column_chart [
+                    {
+                        name: "Daily Steps", type: "column", data: daily_user_data
+                    }
+                ], suffix: " steps",points:false, round: 2, loading: "Loading...", xtitle: "Date", ytitle: "Total Steps" %>
+        </div>
+        <% end %>
+        <% end %>
+        <%# <canvas id="chart-sales-dark" class="chart-canvas"></canvas> %>
+      </div>
 
-          
-      <%else%>
-        <h3 style="color:black;">No activities for the past 3 months</h3>
-      <%end%>
-     
-      <%# <canvas id="chart-sales-dark" class="chart-canvas"></canvas> %>
     </div>
-        
   </div>
+  <script>
+    function revealChartType(event) {
+      var chart_type = $(event.target).val();
+      var chart = $('input[name="chart"]:checked').val();
+      $('#charts .chart').hide();
+      $('#' + chart_type + "_" + chart).show();
+    }
+    $(function () {
+      $('#chart_type input').click(revealChartType);
+    });
+
+    // to reveal daily or weekly chart
+    function revealChart(event) {
+      var chart = $(event.target).val();
+      var chart_type = "activity_chart"
+      $('#charts .chart').hide();
+      $('#' + chart_type + "_" + chart).show();
+    }
+    $(function () {
+      $('#actions input').click(revealChart);
+    });
+  </script>
+
+
+
+
+  <%# <canvas id="chart-sales-dark" class="chart-canvas"></canvas> %>
 </div>
-<script>
-
-function revealChartType(event) {
-    var chart_type = $(event.target).val(); 
-    var chart = $('input[name="chart"]:checked').val();
-    $('#charts .chart').hide(); 
-    $('#' + chart_type +"_"+chart).show();  
-}
-$(function() {
-    $('#chart_type input').click(revealChartType);
-});
-
-// to reveal daily or weekly chart
-function revealChart(event) {
-    var chart = $(event.target).val(); 
-    var chart_type = "activity_chart"
-    $('#charts .chart').hide(); 
-    $('#' + chart_type +"_"+chart).show();  
-}
-$(function() {
-    $('#actions input').click(revealChart);
-});
-</script>
-
-
-
-      
-      <%# <canvas id="chart-sales-dark" class="chart-canvas"></canvas> %>
-    </div>
-  </div>
+</div>
 </div>

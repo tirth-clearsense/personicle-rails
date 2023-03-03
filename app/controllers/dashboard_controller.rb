@@ -27,21 +27,17 @@ class DashboardController < ApplicationController
     if params[:refresh]=="hard_refresh"
       puts "hard refresh"
       @response = FetchData.get_events(session,event_type=false,st,et,hard_refresh=true,uid=session[:oktastate]['uid'])
-      @response_step = FetchData.get_datastreams(session,source="google-fit",data_type="com.personicle.individual.datastreams.interval.step.count",start_date=st, end_date=et, is_hard_refresh=true,uid=session[:oktastate]['uid'])
-      @response_weight = FetchData.get_datastreams(session,source="google-fit",data_type="com.personicle.individual.datastreams.weight",start_date=st, end_date=et, hard_refresh=true,uid=session[:oktastate]['uid'])
-
-      @response_calories = FetchData.get_datastreams(session,source="google-fit",data_type="com.personicle.individual.datastreams.interval.total_calories",start_date=st, end_date=et, hard_refresh=true,uid=session[:oktastate]['uid'])
-  
+      @response_step = FetchData.get_datastreams(session,source="google-fit",datatype="com.personicle.individual.datastreams.interval.step.count",start_date=st, end_date=et, is_hard_refresh=true,uid=session[:oktastate]['uid'])
+      @response_weight = FetchData.get_datastreams(session,source="google-fit",datatype="com.personicle.individual.datastreams.weight",start_date=st, end_date=et, hard_refresh=true,uid=session[:oktastate]['uid'])
+      @response_calories = FetchData.get_datastreams(session,source="google-fit",data_type="com.personicle.individual.datastreams.interval.total_calories",start_date=st, end_date=et, is_hard_refresh=true,user_id=session[:oktastate]['uid'])
+     
     else
       puts "not hard refresh"
       @response = FetchData.get_events(session,event_type=false,st,et,hard_refresh=false,uid=session[:oktastate]['uid'])
-      @response_step = FetchData.get_datastreams(session,source="google-fit",data_type="com.personicle.individual.datastreams.step.count",start_date=st, end_date=et, hard_refresh=false,uid=session[:oktastate]['uid'])
-      @response_weight = FetchData.get_datastreams(session,source="google-fit",data_type="com.personicle.individual.datastreams.weight",start_date=st, end_date=et, hard_refresh=false,uid=session[:oktastate]['uid'])
+      @response_step = FetchData.get_datastreams(session,source="google-fit",datatype="com.personicle.individual.datastreams.interval.step.count",start_date=st, end_date=et, hard_refresh=false,uid=session[:oktastate]['uid'])
+      @response_weight = FetchData.get_datastreams(session,source="google-fit",datatype="com.personicle.individual.datastreams.weight",start_date=st, end_date=et, hard_refresh=false,uid=session[:oktastate]['uid'])
+      @response_calories = FetchData.get_datastreams(session,source="google-fit",data_type="com.personicle.individual.datastreams.interval.total_calories",start_date=st, end_date=et, is_hard_refresh=false,user_id=session[:oktastate]['uid'])
 
-      @response_calories = FetchData.get_datastreams(session,source="google-fit",data_type="com.personicle.individual.datastreams.interval.total_calories",start_date=st, end_date=et, hard_refresh=false,uid=session[:oktastate]['uid'])
-
-      # puts "Step data"
-      # puts @response_step
     end 
    
     if !@response.empty?
