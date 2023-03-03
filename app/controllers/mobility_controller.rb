@@ -64,15 +64,14 @@ class MobilityController < ApplicationController
 
       temporary_steps = @response.group_by_day{|rec| rec['end_time'].to_datetime}.to_h 
       @mobility_aggregated = temporary_steps.map {|k,v| {k => v.sum {|r| r['value']}}}
-      # puts @mobility_aggregated
+     
 
       # Find how many total steps were taken in the last week
       tmp_steps = @response.select {|record| record['end_time'].to_datetime > 30.days.ago}.map {|rec| [rec['end_time'].to_date, rec['value']]}.group_by {|r| r[0]}.to_h
       @daily_steps = tmp_steps.map {|k,v| [k, v.sum {|r| r[1]}]}.to_h
-      # puts @daily_steps
+      
       @last_week_total_steps = @daily_steps.select {|k,v| k > 7.days.ago}.sum {|k,v| v}
-      puts "Number of Steps Taken All Last Week"
-      puts @last_week_total_steps 
+     
     else
       @processed_steps_data = {}
       @mobility_aggregated = {}
