@@ -24,17 +24,18 @@
  <%= render 'layouts/insights' , notification_type: "mobility" %>
 <!-- Page content -->
 
+
   <div class="row">
     <div class="col" background-color="white">
      <% @data = !@processed_steps_data.nil? ? @processed_steps_data.map { |day_of_week, per_minute_data|
             {name: day_of_week, data: per_minute_data} 
         } : []
       %>
-        <%= render 'pages/mobility/charts/day_of_week', user_data:@data %>
-      
+        <%= render 'pages/mobility/charts/day_of_week', user_data:@data %> 
     </div>
-    
   </div>
+
+
 
   <div class="row">
     <div class="col" background-color="white">
@@ -42,7 +43,7 @@
       %>
       <% @weekly_data = !@weekly_aggregated.nil? ? @weekly_aggregated: []
       %>
-        <%= render 'pages/mobility/charts/bar_totalsteps_dayandweek.html.erb', daily_user_data:@daily_data, weekly_user_data:@weekly_data, last_week_data: @last_week_total_steps %>
+        <%= render 'pages/mobility/charts/bar_totalsteps_dayandweek.html.erb', daily_user_data:@daily_steps, weekly_user_data:@weekly_aggregated, all_months_by_month_year_data: @all_months_with_steps  %>
       
     </div>
     

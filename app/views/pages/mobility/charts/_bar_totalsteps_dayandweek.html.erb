@@ -1,3 +1,15 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<!-- Popper JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.3/umd/popper.min.js"></script>
+
+<!-- Bootstrap JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/js/bootstrap.min.js"></script>
+
+
+
 <style>
   .hidden {
     display: none;
@@ -10,15 +22,14 @@
 
 
 <div class="card mr-1">
-
   <div class="card-header bg-transparent">
     <div class="row align-items-center">
       <div class="col">
         <h6 class="text-black text-uppercase ls-1 mb-1">Overview</h6>
         <h5 class="h3 text-black mb-0">Daily and Weekly Mobility Trend</h5>
       </div>
-      <div class="col">
 
+      <div class="col">
         <ul class="nav nav-pills justify-content-end">
           <li class="nav-item mr-2 mr-md-0" value="daily" data-toggle="chart" data-target="#chart-sales-dark"
             data-update='{"data":{"datasets":[{"data":[0, 20, 10, 30, 15, 40, 20, 60, 60]}]}}' data-prefix="$"
@@ -26,12 +37,12 @@
 
             <div id="actions" class="btn-group btn-group-toggle" data-toggle="buttons">
               <label class="btn btn-secondary">
-                <input type="radio" name="chart" value="daily" checked><span class="hovertext"
+                <input type="radio" name="chart" id="daily-button" value="daily" checked><span class="hovertext"
                   data-hover="A column chart showing daily steps by date."><i class="fa fa-info-circle"
                     aria-hidden="true"></i></span> Daily
               </label>
               <label class="btn btn-secondary">
-                <input type="radio" name="chart" value="weekly"><span class="hovertext"
+                <input type="radio" name="chart" id="weekly-button" value="weekly"><span class="hovertext"
                   data-hover="A column chart showing weekly steps by the 1st day of each week."><i
                     class="fa fa-info-circle" aria-hidden="true"></i></span> Weekly
               </label>
@@ -47,68 +58,171 @@
     </div>
   </div>
 
-  <div class="card-body">
+    <div class="card-body">
+      <!-- Chart -->
+      <div class="chart">
+        <% if (daily_user_data.length() != 0 or weekly_user_data.length()!=0) %>
+        <% puts "Daily User Data " %>
+        <%# <% puts daily_user_data %>
+        <% puts "Weekly User Data " %>
+        <%# <% puts weekly_user_data  %>
 
-    <!-- Chart -->
-    <div class="chart">
 
-      <% if (daily_user_data.length() != 0 or weekly_user_data.length()!=0) %>
-      
-      
+        <div id="charts">
 
-      <div id="charts">
-        <div id="activity_chart_weekly" class="chart hidden">
-          <%= column_chart [
+          <div id="activity_chart_weekly" class="chart hidden">
+            <%= column_chart [
                   {
                       name: "Weekly Steps", type: "column", data: weekly_user_data
                   }
               ], suffix: " steps",points:false, round: 2, loading: "Loading...", xtitle: "Starting Date for the Week", ytitle: "Total Steps" %>
+          </div>
+
+          <div id="myCarousel" class="carousel slide" data-interval="false">
+
+
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner" role="listbox">
+
+              <div id="activity_chart_daily" class="chart">
+                <% all_months_by_month_year_data.each do |month_year, steps| %>
+                <div class="carousel-item <%= 'active' if month_year == all_months_by_month_year_data.keys.first %>">
+                    <div class="smaller-chart">
+                  <%= column_chart [
+                  {
+                      name: month_year, type: "column", data: all_months_by_month_year_data[month_year]
+                  }
+              ], suffix: " steps",points:false, round: 2, loading: "Loading...", xtitle: "Date", ytitle: "Total Steps" %>
+                    </div>
+                </div>
+                <% end %>
+              </div>
+            </div>
+
+            <!-- Left and right controls -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            
+            <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+
+
+          </div>
         </div>
 
-        <div id="activity_chart_daily" class="chart">
-          <% if last_week_data == 0 %>
-          <h3 style="color:black;">No activity for the past 1 week</h3>
-          <% else %>
-          <%= column_chart [
-                    {
-                        name: "Daily Steps", type: "column", data: daily_user_data
-                    }
-                ], suffix: " steps",points:false, round: 2, loading: "Loading...", xtitle: "Date", ytitle: "Total Steps" %>
-        </div>
-        <% end %>
-        <% end %>
-        <%# <canvas id="chart-sales-dark" class="chart-canvas"></canvas> %>
+        <%else%>
+        <h3 style="color:black;">No activities for the past 3 months</h3>
+        <%end%>
+
       </div>
-
     </div>
-  </div>
-  <script>
-    function revealChartType(event) {
-      var chart_type = $(event.target).val();
-      var chart = $('input[name="chart"]:checked').val();
-      $('#charts .chart').hide();
-      $('#' + chart_type + "_" + chart).show();
-    }
-    $(function () {
-      $('#chart_type input').click(revealChartType);
-    });
+</div>
 
-    // to reveal daily or weekly chart
-    function revealChart(event) {
-      var chart = $(event.target).val();
-      var chart_type = "activity_chart"
-      $('#charts .chart').hide();
-      $('#' + chart_type + "_" + chart).show();
-    }
-    $(function () {
-      $('#actions input').click(revealChart);
-    });
-  </script>
+<script>
+  function revealChartType(event) {
+    var chart_type = $(event.target).val();
+    var chart = $('input[name="chart"]:checked').val();
+    $('#charts .chart').hide();
+    $('#' + chart_type + "_" + chart).show();
+  }
+  $(function () {
+    $('#chart_type input').click(revealChartType);
+  });
+
+  // to reveal daily or weekly chart
+  function revealChart(event) {
+    var chart = $(event.target).val();
+    var chart_type = "activity_chart"
+    $('#charts .chart').hide();
+    $('#' + chart_type + "_" + chart).show();
+  }
+  $(function () {
+    $('#actions input').click(revealChart);
+  });
+
+  // function lastMonthChart() {
+  //   // Get the current month displayed on the chart
+  //   var chart = Chartkick.charts["chart-3"];
+  //   var data = chart.getData();
+  //   var startDateChart = data[0]['data'][0][0];
+
+  //   // Calculate the start and end dates for the previous month
+  //   var prevMonthStart = moment(startDateChart).subtract(1, 'months').startOf('month');
+  //   var prevMonthEnd = moment(prevMonthStart).endOf('month');
+
+  //   // Fetch the data for the previous month
+  //   $.getJSON('/pages/mobility/last_month', function (data) {
+  //     // Use the data directly (no need to parse it)
+  //     var chartData = Object.entries(data).map(function (pair) {
+  //       return [pair[0], pair[1]];
+  //     });
+
+  //     // Find the chart and update its data
+  //     chart.updateData(chartData);
+  //   });
+
+    //  $(document).ready(function(){
+    //           $("#myCarousel").carousel();
+
+    //           // Enable Carousel Indicators
+    //           $(".left").click(function(){
+    //               $("#myCarousel").carousel(0);
+
+    //               // The next line of code triggers the listeners for the page-resizing 
+    //               // event, which includes the carousel and will display the chart         
+    //               // correctly. 
+
+    //           });
+    //           // $(".item2").click(function(){
+    //           //     $("#myCarousel").carousel(1);
+    //           //     window.dispatchEvent(new Event('resize'));
+    //           // });
+
+    //            $(".right").click(function(){
+    //               $("#myCarousel").carousel(2);
+    //           });
+
+    //       });
+
+    // // Update startDateChart, prevMonthStart, and prevMonthEnd for the new chart
+    // chart.on('redraw', function() {
+    //   var data = chart.getData();
+    //   var newStartDateChart = data[0]['data'][0][0];
+    //   var newPrevMonthStart = moment(newStartDateChart).subtract(1, 'months').startOf('month');
+    //   var newPrevMonthEnd = moment(newPrevMonthStart).endOf('month');
+
+    //   startDateChart = newStartDateChart;
+    //   prevMonthStart = newPrevMonthStart;
+    //   prevMonthEnd = newPrevMonthEnd;
+    // });
+
+  // var lastWeekData = $.ajax({
+  //   url: '/pages/mobility/last_week',
+  //   async: false
+  // });
+  // var chart = document.getElementById('activity_chart_daily');
+  // console.log('Last Week Data AJAX Request')
+  // console.log(lastWeekData)
+  // console.log('Parsed JSON AJAX')
+  // console.log(JSON.parse(lastWeekData))
+  // chart.chartData = JSON.parse(lastWeekData);
+  // chart.refresh();
+
+  // to update chart when forward arrow pressed (with next week's data)
+  function nextWeekChart(event) {
+
+  }
+
+  
+</script>
 
 
 
-
-  <%# <canvas id="chart-sales-dark" class="chart-canvas"></canvas> %>
+<%# <canvas id="chart-sales-dark" class="chart-canvas"></canvas> %>
 </div>
 </div>
 </div>
