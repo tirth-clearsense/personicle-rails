@@ -72,6 +72,8 @@ Rails.application.routes.draw do
   # get 'api/user/physicians', :to=> 'profile#get_users_physicians_api' #  get users physicians
   post 'api/user/physicians/remove', :to=> 'profile#remove_physicinas_api' #  remove user physicians
   
-
+  get 'pages/mobility/last_month', to: 'mobility#last_month' #get last month's mobility data
+  # get 'pages/mobility/last_week', to: 'mobility#last_week', as: 'last_week' 
+  # post 'pages/mobility/last_week', to: 'mobility#last_week', as: 'last_week' 
 end
 
