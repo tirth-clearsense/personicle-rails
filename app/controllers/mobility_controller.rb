@@ -68,20 +68,18 @@ class MobilityController < ApplicationController
 
       # Find how many total steps were taken in the last month
       tmp_steps = @response.select {|record| record['end_time'].to_datetime > 12.months.ago}.map {|rec| [rec['end_time'].to_date, rec['value']]}.group_by {|r| r[0]}.to_h
-      puts "Temporary Steps over Last 12 Months"
+     
       # puts tmp_steps
       @daily_steps = tmp_steps.map {|k,v| [k, v.sum {|r| r[1]}]}.to_h
-      puts "Daily Steps For Past 12 Months"
-      puts @daily_steps
+      
       @last_week_total_steps = @daily_steps.select {|k,v| k > 7.days.ago}.sum {|k,v| v}
-      puts "Number of Steps Taken All Last Week"
+     
       # puts @last_week_total_steps 
 
-      puts "Add the date and value of 0 for days where there were no steps"
+     
         
         range_for_daily_steps = @daily_steps.keys.first.beginning_of_month..@daily_steps.keys.last.end_of_month
-        puts "Range for Daily Steps (All 12 Months)"
-        puts range_for_daily_steps
+        
 
         @add_missing_days = {}
         range_for_daily_steps.each do |date|
@@ -94,32 +92,21 @@ class MobilityController < ApplicationController
 
         
         @grouped_by_month = @daily_steps.group_by_month { |date, steps| date.strftime('%Y-%m-%d') }
-        puts "Grouped By Month"
-        puts @grouped_by_month
-
-
-
+       
         @all_months_with_steps = {}
         @grouped_by_month.each do |date, steps|
-          puts "Get the Date Range for Each Month"
           year = date.year
           month = date.month
 
           start_date = Date.new(year, month, 1)
           end_date = (start_date >> 1) - 1
           @date_range = start_date..end_date
-          puts @date_range
-          puts "#{date.strftime('%b %Y')}: #{@date_range}"
+      
           # puts "Each Month Daily"
           @any_month_daily = @add_missing_days.select {|k,v| @date_range.include?(k)}
           # puts @any_month_daily
           @all_months_with_steps[date.strftime('%b %Y')] = @any_month_daily
         end
-  
-      puts "Each Month's Set Accessed Using date.strftime('%b %Y')"
-      puts @all_months_with_steps
-      puts "Hash with Zero Steps on Missing Dates"
-      puts @add_missing_days
     else
       @processed_steps_data = {}
       @mobility_aggregated = {}
