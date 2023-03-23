@@ -64,8 +64,10 @@
           </td>
           <td scope="row" id="parameters-<%=record['unique_event_id']%>" name="parameters">
             <input id="hidden-parameters-<%=record['unique_event_id']%>" type="hidden" value="<%=record['parameters'].to_json%>" name="parameters"/>
-            
-            <a tabindex="0" role="button" data-toggle="popover" data-animation="true" data-trigger="hover click" title="Parameters" data-content="Duration: <%=record['parameters'].duration%> Source Device: <%=record['parameters'].source_device.packageName if !record['parameters'].source_device.nil? %> Version: <%=record['parameters'].source_device.version if !record['parameters'].source_device.nil? %>  Details URL: <%=record['parameters'].source_device.detailsUrl if !record['parameters'].source_device.nil?%>  ">See Details</a>
+            <% if record['source'] == 'google-fit'%>
+                  <a tabindex="0" role="button" data-toggle="popover" data-animation="true" data-trigger="hover click" title="Parameters" data-content="Duration: <%=record['parameters'].duration%> Source Device: <%=record['parameters'].source_device.packageName if !record['parameters'].source_device.nil? %> Version: <%=record['parameters'].source_device.version if !record['parameters'].source_device.nil? %>  Details URL: <%=record['parameters'].source_device.detailsUrl if !record['parameters'].source_device.nil?%>  ">See Details</a>
+            <% end %>
+          
           </td>
         </tr>
       <% end %>
