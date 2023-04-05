@@ -74,7 +74,7 @@ class MobilityController < ApplicationController
 
       # Find how many total steps were taken in the last month
       tmp_steps = @response.select {|record| record['end_time'].to_datetime}.map {|rec| [rec['end_time'].to_date, rec['value']]}.group_by {|r| r[0]}.to_h
-      puts "Temporary Steps over Last 12 Months"
+      
       # puts tmp_steps
       @daily_steps = tmp_steps.map {|k,v| [k, v.sum {|r| r[1]}]}.to_h
       
