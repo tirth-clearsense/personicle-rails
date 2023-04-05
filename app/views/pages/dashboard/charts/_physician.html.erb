@@ -35,7 +35,7 @@
               <label class="btn btn-secondary">
                 <input type="radio" name="charttype" value="activity_chart" > Activity
               </label>
-              
+             
               <% if !unique_question_tags.nil? %>
                 <% unique_question_tags.each do |tag| %>
                   <label class="btn btn-secondary">
@@ -96,6 +96,7 @@
             # puts @numeric_responses
           %>
         <% unique_question_tags.each do |tag|%>
+        
           <div id="<%=tag%>_chart_daily" class="chart hidden">
            <%
               @patient_responses=  patient_responses.filter {|rec| rec[0][0] == tag}.group_by {|rec| rec[0][1]}

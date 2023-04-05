@@ -223,16 +223,32 @@
            %> 
            <% if show_numeric_chart %>
               <%
-                  start_date = numeric_weekly_data.keys.min 
-                  end_date = numeric_weekly_data.keys.max 
-                  date_range = (start_date..end_date)
-                  date_range.step(1) do |date|
-                    if !numeric_weekly_data[date]
-                      numeric_weekly_data[date] = 0
-                    end
-                  end
+                  dates  = numeric_weekly_data.transform_keys { |k| Date.strptime(k + '-1', '%G-%V-%u') }
+                  # start_date = numeric_weekly_data.keys.min 
+                  # end_date = numeric_weekly_data.keys.max 
+                  min_date = dates.keys.min
+                  max_date = dates.keys.max
+                  all_dates = (min_date..max_date).step(7).map { |d| d.strftime('%G-%V') }
+                  missing_dates = all_dates - numeric_weekly_data.keys
+                  missing_hash = missing_dates.map { |k| [k, 0] }.to_h
+                  numeric_weekly_data = numeric_weekly_data.merge(missing_hash)
                   numeric_weekly_data = numeric_weekly_data.sort.to_h
+
+                  # date = min_date
+                  # while date <= max_date do
+                  #   date_str = date.strftime('%G-%V')
+                  #   numeric_weekly_data[date] ||= 0
+                  #   date += 7 # Add one week
+                  # end
+                  # date_range = (start_date..end_date)
+                  # date_range.step(1) do |date|
+                  #   if !numeric_weekly_data[date]
+                  #     numeric_weekly_data[date] = 0
+                  #   end
+                  # end
+                  # numeric_weekly_data = numeric_weekly_data.sort.to_h
               %>
+              
               <%= column_chart  numeric_weekly_data,   title: tag, library: { isStacked: 'percent' },suffix: "",points:false, round: 2, loading: "Loading...", xtitle: "Year - Week number", ytitle: "Total Responses", stacked: true %>
            <% else %>
               <%= column_chart  @data,   title: tag, library: { isStacked: 'percent' },suffix: "",points:false, round: 2, loading: "Loading...", xtitle: "Year - Week number", ytitle: "Total Responses", stacked: true %>
