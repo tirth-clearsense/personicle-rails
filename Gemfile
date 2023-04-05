@@ -26,6 +26,7 @@ gem 'jquery-datatables'
 gem 'rails-i18n', '~> 6.0.0' # For 6.0.0 or higher # GEOCODER #I18n
 gem 'geoip'
 gem 'geocoder'
+gem 'turbo-rails'
 
 # Use Puma as the app server
 gem 'puma', '~> 4.1'
@@ -42,7 +43,7 @@ gem 'capistrano-rbenv', '~> 2.2'
 gem 'capistrano-passenger', '~> 0.2.1'
 gem 'capistrano-rails', '~> 1.6', '>= 1.6.2'
 # Use Redis adapter to run Action Cable in production
-# gem 'redis', '~> 4.0'
+gem 'redis', '~> 4.0'
 # Use Active Model has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 gem 'rest-client'

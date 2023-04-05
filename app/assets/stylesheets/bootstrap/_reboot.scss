@@ -348,6 +348,10 @@ button,
   -webkit-appearance: button; // 2
 }
 
+label[for=submit] {
+  margin-top: 3rem;
+}
+
 // Opinionated: add "hand" cursor to non-disabled button elements.
 @if $enable-pointer-cursor-for-buttons {
   button,

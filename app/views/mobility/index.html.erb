@@ -1,10 +1,11 @@
 <div class="header-margin">
-<div class="header-info">
-  <h1>Mobility</h1>
-  <p><b>Tracks user mobility on different days as well as daily versus weekly mobility trends.</b></p>
-</div>
+  <div class="header-info">
+    <h1>Mobility</h1>
+    <p><b>Tracks user mobility on different days as well as daily versus weekly mobility trends.</b></p>
+  </div>
 </div>
 
+<!--- Page Header --->
 <div class="header bg-primary pb-6">
   <div class="container-fluid">
     <div class="header-body">
@@ -18,20 +19,37 @@
 </div>
 
 
-
-<!-- Page content -->
+<!-- Page content - Mobility Insights -->
 <div class="container-fluid mt--6">
- <%= render 'layouts/insights' , notification_type: "mobility" %>
-<!-- Page content -->
+  <%= render 'layouts/insights' , notification_type: "mobility" %>
+
+  <!-- Page content - DatePicker Component with Search-->
+  <div class="row">
+    <div class="col" background-color="white">
+      <div class="card">
+        <div class="card-header bg-transparent">
+          <div class="row align-items-center">
+            <div class="col">
+                <h5 class="h3 text-black mb-0"><span class="hovertext" data-hover="Choose the start and end date for the steps data that you want to visualize in the mobility charts below."><i class="fa fa-info-circle" aria-hidden="true"></i></span> Choose date range for the mobility data</h5>
+              <%= form_tag mobility_index_path, method: :get, class: 'datepicker-css' do %>
+              <!---- render the Datepicker ---->
+              <%= render partial: 'pages/datepicker', locals: { start_date: @start_date, end_date: @end_date } %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
 
   <div class="row">
     <div class="col" background-color="white">
-     <% @data = !@processed_steps_data.nil? ? @processed_steps_data.map { |day_of_week, per_minute_data|
+      <% @data = !@processed_steps_data.nil? ? @processed_steps_data.map { |day_of_week, per_minute_data|
             {name: day_of_week, data: per_minute_data} 
         } : []
       %>
-        <%= render 'pages/mobility/charts/day_of_week', user_data:@data %> 
+      <%= render 'pages/mobility/charts/day_of_week', user_data:@data %>
     </div>
   </div>
 
@@ -39,15 +57,16 @@
 
   <div class="row">
     <div class="col" background-color="white">
-     <% @daily_data = !@mobility_aggregated.nil? ? @mobility_aggregated: []
+      <% @daily_data = !@mobility_aggregated.nil? ? @mobility_aggregated: []
       %>
       <% @weekly_data = !@weekly_aggregated.nil? ? @weekly_aggregated: []
       %>
-        <%= render 'pages/mobility/charts/bar_totalsteps_dayandweek.html.erb', daily_user_data:@daily_steps, weekly_user_data:@weekly_aggregated, all_months_by_month_year_data: @all_months_with_steps  %>
-      
+      <%= render 'pages/mobility/charts/bar_totalsteps_dayandweek.html.erb', daily_user_data:@daily_steps, weekly_user_data:@weekly_aggregated, all_months_by_month_year_data: @all_months_with_steps  %>
+
     </div>
-    
+
   </div>
 
   <%= render 'pages/footer' %>
 </div>
+

@@ -105,7 +105,7 @@
   word-spacing: 5px;
   margin: 20px auto;
 
-   
+  // Headers Margins and Hover Information Blurbs
 }
 .header-margin{
     background-color: #5e72e4;
@@ -149,3 +149,45 @@
     opacity: 1;
     visibility: visible;
   }
+
+// Datepicker on app>views>mobility>index.html.erb
+.datepicker-css {
+  margin: 2rem 0 2rem 0;
+  position: relative;
+  top: 50%;
+  left: 10%;
+}
+
+// Mobility Insights on app>views>layouts/_insights.html.erb
+.text-success {
+  position: relative;
+  top: 50%;
+  margin: 0 auto;
+  padding-right: 5rem;
+  text-size-adjust: auto;
+}
+
+.insights-css {
+  text-align: center;
+  margin: 0 auto;
+  height: 10rem auto;
+}
+
+
+// Navigation Buttons (Next and Previous Arrows) for Chartkick Chart on Mobility Page
+
+.carousel-arrow-prev-css {
+  margin-left: -7rem;
+  top: 50%;
+}
+
+.carousel-arrow-next-css {
+  margin-right: -8rem;
+  top: 50%;
+}
+
+#activity_chart_daily {
+  width: 90%;
+  position: relative;
+  left: 5%;
+}

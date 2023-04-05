@@ -75,5 +75,7 @@ Rails.application.routes.draw do
   get 'pages/mobility/last_month', to: 'mobility#last_month' #get last month's mobility data
   # get 'pages/mobility/last_week', to: 'mobility#last_week', as: 'last_week' 
   # post 'pages/mobility/last_week', to: 'mobility#last_week', as: 'last_week' 
+
+  get 'pages/mobility/pick_date', to: 'mobility#pick_date', as: 'pick_date' #get path to pick_date from the _bar_totalsteps_dayandweek.html.erb 
 end
 

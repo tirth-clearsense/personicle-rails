@@ -1,0 +1,119 @@
+<!-- Import the js-cookie and moment.js libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/3.0.0/js.cookie.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
+
+<!---- DatePicker wrapped inside TurboFrame ---->
+<div class="row">
+    <div class="col" background-color="white">
+        <div class="datepicker-frame row justify-content-center" data-controller="datepicker"
+            data-datepicker-target="frame">
+            <div class="col-lg-3 col-sm-6">
+                <label for="start_date">Start Date</label>
+                <%= text_field_tag 'start_date', start_date, class: 'form-control', type: 'date', autocomplete: 'off' %>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+                <label for="end_date">End Date</label>
+                <%= text_field_tag 'end_date', end_date, class: 'form-control', type: 'date', autocomplete: 'off' %>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+                <label for="submit"></label>
+                <%= submit_tag 'Search', class: 'btn btn-primary' %>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Include the JavaScript code within a <script> tag -->
+<script>
+// Retrieve the Start and End date input fields using JavaScript
+const startDateInput = document.getElementById('start_date');
+const endDateInput = document.getElementById('end_date');
+const startDateError = document.getElementById('start_date_error');
+const endDateError = document.getElementById('end_date_error');
+
+// Add an onchange event to the date fields to limit the selectable date range and validate the selected dates
+startDateInput.addEventListener('change', function() {
+  endDateInput.min = this.value;
+  validateDates();
+});
+endDateInput.addEventListener('change', function() {
+  startDateInput.max = this.value;
+  validateDates();
+});
+
+// Function to validate the selected dates and update the error messages
+function validateDates() {
+  const start = moment(startDateInput.value);
+  const end = moment(endDateInput.value);
+  
+  // Check if start date is later than end date
+  if (start.isAfter(end)) {
+    startDateInput.classList.add('is-invalid');
+    endDateInput.classList.add('is-invalid');
+    startDateInput.textContent = 'Start date must be before end date';
+    endDateInput.textContent = 'End date must be after start date';
+  } else {
+    startDateInput.classList.remove('is-invalid');
+    endDateInput.classList.remove('is-invalid');
+    startDateInput.title = '';
+    endDateInput.title = '';
+  }
+}
+
+// Check if Start and End dates were previously selected and stored in cookies
+const storedStartDate = Cookies.get('selectedStartDate');
+const storedEndDate = Cookies.get('selectedEndDate');
+
+// If Start and End dates were stored, set the input field values to those dates
+if (storedStartDate && storedEndDate) {
+  startDateInput.value = moment(storedStartDate).format('YYYY-MM-DD');
+  endDateInput.value = moment(storedEndDate).format('YYYY-MM-DD');
+}
+
+
+// Add an event listener to the Search button to delete the previous cookies and store the new selected dates in cookies
+const searchButton = document.querySelector('input[type="submit"]');
+searchButton.addEventListener('click', function() {
+  Cookies.remove('selectedStartDate');
+  Cookies.remove('selectedEndDate');
+  Cookies.set('selectedStartDate', startDateInput.value, { expires: 7 });
+  Cookies.set('selectedEndDate', endDateInput.value, { expires: 7 });
+});
+
+// Add an event listener to the Search button to check if start date is less than end date and end date is less than start date
+searchButton.addEventListener('click', function() {
+  const start = moment(startDateInput.value);
+  const end = moment(endDateInput.value);
+  
+  // Check if the selected dates are valid
+  if (startDateInput.classList.contains('is-invalid') || endDateInput.classList.contains('is-invalid')) {
+    event.preventDefault();
+  }
+});
+
+function dateChangeHandle(obj) {
+  
+  console.log(obj.id + " changed")
+//   var checkbox;
+//   if (obj.id.startsWith("start")) {
+//     //   checkbox = document.getElementById("row-check-"+obj.id.replace("startdate-",""));
+//     //   checkbox.checked = true;
+//       var endDateChange = document.getElementById("end-date-"+obj.id.replace("startdate-",""))
+//       endDateChange.min = obj.value;
+//       // let unique_event_id = obj.id.replace("startdate-","");
+//   }
+//   else {
+//     //   checkbox = document.getElementById("row-check-"+obj.id.replace("end-date-",""));
+//     //   checkbox.checked = true;
+//       var startDateChange = document.getElementById("startdate-"+obj.id.replace("end-date-",""))
+//       startDateChange.max = obj.value;
+//       // let unique_event_id = obj.id.replace("end-date","");
+//   }
+}
+</script>
+
+
+
+
+

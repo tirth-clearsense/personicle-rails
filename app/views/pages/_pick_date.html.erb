@@ -1,0 +1,19 @@
+<%# Get the updated data based on the start and end dates %>
+<%# <% "chart component test" %>
+<%# <%= chart_data %> 
+<%# <% puts chart_data %> 
+
+<%# Use Turbo Streams to replace the chart component with the updated data %>
+<%# <turbo-stream action="replace" target="activity_chart_daily">
+  <% chart_data.each do |month_year, steps| %> 
+  <%# <div class="carousel-item <%= 'active' if month_year == chart_data.keys.first %>
+    <%# <div class="control-padding"> %>
+                 <%# <%= column_chart [
+                          {
+                            name: month_year, type: "column", data: chart_data[month_year]
+                          }
+                        ], suffix: " steps", points: false, round: 2, loading: "Loading...", xtitle: "Date", ytitle: "Total Steps" %>
+                      <%# </div>
+                    </div> %>
+                  <%# <% end %>
+<%# </turbo-stream> %>
