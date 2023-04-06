@@ -83,6 +83,7 @@ class FoodlogController < ApplicationController
             "end_time": "#{Time.find_zone("UTC").parse(end_time)}",
             "duration": "#{duration}",
             "event_name": "Food",
+            "event_type": "org.personicle.individual.event.food"
             "source": "personicle-foodlogger",
             "parameters": "{\"recipe_name\": \"#{params[:recipe_name]}\", \"duration\": \"#{duration}\", \"servings\" : \"#{params[:servings]}\" , \"ingredients\": \"#{params[:ingredients]}\"}"
         }]
